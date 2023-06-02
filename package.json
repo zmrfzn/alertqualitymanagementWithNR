@@ -6,7 +6,8 @@
   "scripts": {
     "postinstall": "echo \"Play nice!\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "browser-sync start --server --serveStatic src/ --files 'src/**/*' --no-inject-changes --directory",
+    "start": "npm run build && node server",
+    "start-old": "browser-sync start --server --serveStatic src/ --files 'src/**/*' --no-inject-changes --directory",
     "build": "mkdir -p dist && cp -r src/* dist && babel src/ --out-dir dist --presets=env --ignore lib/*"
   },
   "author": "TeamScripta <admin@scripta.co>",
@@ -22,5 +23,11 @@
     "browser-sync": "^2.18.2"
   },
   "dependencies": {
+    "body": "^5.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "newrelic": "^9.11.0",
+    "parser": "^0.1.4",
+    "winston": "^3.9.0"
   }
 }
