@@ -24,9 +24,10 @@
   },
   "dependencies": {
     "body": "^5.1.0",
+    "chaos-monkey": "^0.7.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "newrelic": "^9.11.0",
+    "newrelic": "^9.15.0",
     "parser": "^0.1.4",
     "winston": "^3.9.0"
   }
