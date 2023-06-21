@@ -1,3 +1,5 @@
+// const newrelic = require('newrelic')
+// const ChaosMonkey = require('chaos-monkey');
 const express = require("express");
 const app = express();
 const path = require("path");
@@ -5,6 +7,7 @@ const router = express.Router();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const winston = require("winston");
+// ChaosMonkey.initialize(app);
 
 const logger = winston.createLogger({
     level: "info",

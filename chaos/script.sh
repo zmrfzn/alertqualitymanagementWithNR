@@ -1,0 +1,1 @@
+stress-ng --cpu 4 --vm 2 --vm-bytes 2G --hdd 4 --fork 8 --matrix 0 -t 180s --udp-flood 0 -t 3m --timeout 3m --metrics
