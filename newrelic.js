@@ -9,7 +9,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name: ['workshopAQM-App'],
+  app_name: ['workshopaqm-app'],
   /**
    * Your New Relic license key.
    */
