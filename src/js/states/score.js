@@ -4,6 +4,7 @@ class ScoreState extends Phaser.State {
         this.stats = stats;
         this.previousMusic = music;
     }
+    
     create() {
         console.log('[score] showing score menu');
 
@@ -22,6 +23,7 @@ class ScoreState extends Phaser.State {
         this.fontSet = `! "#$%^'()* +,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_abcdefghijklmnopqrstuvwxyz{|}~`;
 
         const score = this.stats.transportsLaunched * 1000;
+        console.log("HERE is score - ", score)
         const hiscore = JSON.parse(localStorage.hiscore || '0');
 
         localStorage.hiscore = Math.max(hiscore, score);

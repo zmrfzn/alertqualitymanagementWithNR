@@ -563,9 +563,9 @@ class PlayState extends Phaser.State {
     }
 
     /* misc functions */
-
     asteroidStrike(earth, asteroid) {
         console.log('[play] asteroid strike');
+        console.log("HERE is the Asteroid Strike!")
         this.stats.asteroidStrikes += 1;
         const sound = this.sounds.AsteroidHit.play();
 

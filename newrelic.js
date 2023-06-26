@@ -13,7 +13,7 @@ exports.config = {
   /**
    * Your New Relic license key.
    */
-  license_key: 'PUT YOUR LICENSE KEY HERE',
+  license_key: 'XXXXX',
   logging: {
     /**
      * Level at which to log. 'trace' is most useful to New Relic when diagnosing
@@ -21,6 +21,11 @@ exports.config = {
      * production applications.
      */
     level: 'info'
+  },
+  application_logging: {
+    forwarding: {
+      enabled: true
+    }
   },
   /**
    * When true, all request headers except for those listed in attributes.exclude
