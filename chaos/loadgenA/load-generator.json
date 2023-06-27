@@ -1,5 +1,5 @@
 {   
-    "pause": 20000,
+    "pause": 30000,
     "timeout": 2000,
     "workers": 8,
     "urls": [
