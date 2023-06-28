@@ -27,7 +27,7 @@ data "newrelic_entity" "host_name" {
 
 # Alert policy
 resource "newrelic_alert_policy" "alert_policy_name" {
-  name = "Examples for Alert Storms"
+  name = "Challenge 1 - Examples for Alert Storms"
   incident_preference = "PER_CONDITION_AND_TARGET"
 }
 
@@ -249,7 +249,7 @@ resource "newrelic_notification_channel" "sample_notification_channel" {
 }
 
 resource "newrelic_workflow" "sample_workflow" {
-  name                  = "Alert Workflow for Support"
+  name                  = "Challenge 1 - Examples for Alert Storms"
   muting_rules_handling = "NOTIFY_ALL_ISSUES"
 
   issues_filter {
