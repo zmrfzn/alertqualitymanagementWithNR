@@ -1,0 +1,8 @@
+{   
+    "pause": 20000,
+    "timeout": 2000,
+    "workers": 10,
+    "urls": [
+      "http://localhost:3000/user"
+    ]
+}

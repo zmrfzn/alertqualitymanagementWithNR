@@ -16,8 +16,8 @@ provider "newrelic" {
   region = var.region     # Valid regions are US and EU
 }
 
-# Data source
-data "newrelic_entity" "host_name" {
+# Data source for New Relic entity
+data "newrelic_entity" "hostname" {
   name = var.hostname # Note: This must be an exact match of your entity in New Relic (Case sensitive)
   type = "HOST"
   domain = "INFRA"
@@ -27,7 +27,7 @@ data "newrelic_entity" "host_name" {
 
 # Alert policy
 resource "newrelic_alert_policy" "alert_policy_name" {
-  name = "Challenge 1 - Examples for Alert Storms"
+  name = "Challenge 1 - Examples for Alert Storm"
   incident_preference = "PER_CONDITION_AND_TARGET"
 }
 
@@ -46,7 +46,7 @@ resource "newrelic_nrql_alert_condition" "highcpu" {
   aggregation_delay              = 120
 
   nrql {
-    query             = "SELECT average(newrelic.goldenmetrics.infra.host.cpuUsage) FROM Metric WHERE entity.name = '${data.newrelic_entity.host_name.name}'"
+    query             = "SELECT average(newrelic.goldenmetrics.infra.host.cpuUsage) FROM Metric WHERE entity.name = '${data.newrelic_entity.hostname.name}'"
   }
 
   critical {
@@ -78,7 +78,7 @@ resource "newrelic_nrql_alert_condition" "highmem" {
   aggregation_delay              = 120
 
   nrql {
-    query             = "SELECT average(newrelic.goldenmetrics.infra.host.memoryUsage) FROM Metric WHERE entity.name = '${data.newrelic_entity.host_name.name}'"
+    query             = "SELECT average(newrelic.goldenmetrics.infra.host.memoryUsage) FROM Metric WHERE entity.name = '${data.newrelic_entity.hostname.name}'"
   }
 
   critical {
@@ -110,7 +110,7 @@ resource "newrelic_nrql_alert_condition" "highstorage" {
   aggregation_delay              = 120
 
   nrql {
-    query             = "SELECT average(newrelic.goldenmetrics.infra.host.storageUsage) FROM Metric WHERE entity.name = '${data.newrelic_entity.host_name.name}'"
+    query             = "SELECT average(newrelic.goldenmetrics.infra.host.storageUsage) FROM Metric WHERE entity.name = '${data.newrelic_entity.hostname.name}'"
   }
 
   critical {
@@ -142,7 +142,7 @@ resource "newrelic_nrql_alert_condition" "highnettx" {
   aggregation_delay              = 120
 
   nrql {
-    query             = "SELECT average(newrelic.goldenmetrics.infra.host.networkTrafficTx) FROM Metric WHERE entity.name = '${data.newrelic_entity.host_name.name}'"
+    query             = "SELECT average(newrelic.goldenmetrics.infra.host.networkTrafficTx) FROM Metric WHERE entity.name = '${data.newrelic_entity.hostname.name}'"
   }
 
   critical {
@@ -174,7 +174,7 @@ resource "newrelic_nrql_alert_condition" "highnetrx" {
   aggregation_delay              = 120
 
   nrql {
-    query             = "SELECT average(newrelic.goldenmetrics.infra.host.networkTrafficRx) FROM Metric WHERE entity.name = '${data.newrelic_entity.host_name.name}'"
+    query             = "SELECT average(newrelic.goldenmetrics.infra.host.networkTrafficRx) FROM Metric WHERE entity.name = '${data.newrelic_entity.hostname.name}'"
   }
 
   critical {
@@ -206,7 +206,7 @@ resource "newrelic_nrql_alert_condition" "highprocess" {
   aggregation_delay              = 60
 
   nrql {
-    query             = "SELECT average(host.process.cpuPercent) FROM Metric FACET processId, processDisplayName WHERE entity.name = '${data.newrelic_entity.host_name.name}'"
+    query             = "SELECT average(host.process.cpuPercent) FROM Metric FACET processId, processDisplayName WHERE entity.name = '${data.newrelic_entity.hostname.name}'"
   }
 
   critical {
@@ -226,7 +226,7 @@ resource "newrelic_nrql_alert_condition" "highprocess" {
 ### Alert workflows & notification ###
 
 # Notification channel
-resource "newrelic_notification_destination" "sample_notification_destination" {
+resource "newrelic_notification_destination" "c1_notification_destination" {
   name = "Alerts to Support Team"
   type = "EMAIL"
 
@@ -236,10 +236,10 @@ resource "newrelic_notification_destination" "sample_notification_destination" {
   }
 }
 
-resource "newrelic_notification_channel" "sample_notification_channel" {
+resource "newrelic_notification_channel" "c1_notification_channel" {
   name           = "Alerts Notification Channel for Support Team"
   type           = "EMAIL"
-  destination_id = newrelic_notification_destination.sample_notification_destination.id
+  destination_id = newrelic_notification_destination.c1_notification_destination.id
   product        = "IINT"
 
   property {
@@ -248,8 +248,8 @@ resource "newrelic_notification_channel" "sample_notification_channel" {
   }
 }
 
-resource "newrelic_workflow" "sample_workflow" {
-  name                  = "Challenge 1 - Examples for Alert Storms"
+resource "newrelic_workflow" "c1_workflow" {
+  name                  = "Challenge 1 - Examples for Alert Storm"
   muting_rules_handling = "NOTIFY_ALL_ISSUES"
 
   issues_filter {
@@ -263,6 +263,6 @@ resource "newrelic_workflow" "sample_workflow" {
   }
 
   destination {
-    channel_id = newrelic_notification_channel.sample_notification_channel.id
+    channel_id = newrelic_notification_channel.c1_notification_channel.id
   }
 }
