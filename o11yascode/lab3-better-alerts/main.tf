@@ -1,6 +1,6 @@
 # Terraform configuration
 terraform {
-  required_version = "1.5.1"
+  // required_version = "1.5.1"
   required_providers {
     newrelic = {
       source  = "newrelic/newrelic"
@@ -100,6 +100,9 @@ resource "newrelic_nrql_alert_condition" "GameMainAPI" {
   aggregation_window             = 60
   aggregation_method             = "event_flow"
   aggregation_delay              = 60
+  expiration_duration = 600
+  open_violation_on_expiration = true
+  close_violations_on_expiration = true
 
   nrql {
     query             = "SELECT percentile(duration, 90) FROM Transaction WHERE appName = '${data.newrelic_entity.appname.name}' AND name = 'WebTransaction/Expressjs/GET//game'"
@@ -248,6 +251,198 @@ resource "newrelic_nrql_alert_condition" "GameResponseTime" {
     threshold             = 4
     threshold_duration    = 120
     threshold_occurrences = "at_least_once"
+  }
+}
+
+# NRQL alert condition - High CPU
+resource "newrelic_nrql_alert_condition" "highcpu" {
+  policy_id                      = newrelic_alert_policy.alert_policy_name.id
+  type                           = "static"
+  name                           = "High CPU"
+  description                    = "Alert when CPU usage is high"
+  runbook_url                    = "https://www.example.com"
+  enabled                        = true
+  violation_time_limit_seconds   = 10800
+  
+  aggregation_window             = 60
+  aggregation_method             = "event_flow"
+  aggregation_delay              = 120
+
+  nrql {
+    query             = "SELECT average(newrelic.goldenmetrics.infra.host.cpuUsage) FROM Metric WHERE entity.name = '${data.newrelic_entity.hostname.name}'"
+  }
+
+  critical {
+    operator              = "above"
+    threshold             = 90
+    threshold_duration    = 120
+    threshold_occurrences = "all"
+  }
+  warning {
+    operator              = "above"
+    threshold             = 70
+    threshold_duration    = 120
+    threshold_occurrences = "all"
+  }
+}
+
+# NRQL alert condition - High Mem
+resource "newrelic_nrql_alert_condition" "highmem" {
+  policy_id                      = newrelic_alert_policy.alert_policy_name.id
+  type                           = "static"
+  name                           = "High Mem"
+  description                    = "Alert when Mem usage is high"
+  runbook_url                    = "https://www.example.com"
+  enabled                        = true
+  violation_time_limit_seconds   = 10800
+  
+  aggregation_window             = 60
+  aggregation_method             = "event_flow"
+  aggregation_delay              = 120
+
+  nrql {
+    query             = "SELECT average(newrelic.goldenmetrics.infra.host.memoryUsage) FROM Metric WHERE entity.name = '${data.newrelic_entity.hostname.name}'"
+  }
+
+  critical {
+    operator              = "above"
+    threshold             = 90
+    threshold_duration    = 120
+    threshold_occurrences = "all"
+  }
+  warning {
+    operator              = "above"
+    threshold             = 70
+    threshold_duration    = 120
+    threshold_occurrences = "all"
+  }
+}
+
+# NRQL alert condition - High Storage
+resource "newrelic_nrql_alert_condition" "highstorage" {
+  policy_id                      = newrelic_alert_policy.alert_policy_name.id
+  type                           = "static"
+  name                           = "High Storage"
+  description                    = "Alert when Storage usage is high"
+  runbook_url                    = "https://www.example.com"
+  enabled                        = true
+  violation_time_limit_seconds   = 10800
+  
+  aggregation_window             = 60
+  aggregation_method             = "event_flow"
+  aggregation_delay              = 120
+
+  nrql {
+    query             = "SELECT average(newrelic.goldenmetrics.infra.host.storageUsage) FROM Metric WHERE entity.name = '${data.newrelic_entity.hostname.name}'"
+  }
+
+  critical {
+    operator              = "above"
+    threshold             = 80
+    threshold_duration    = 120
+    threshold_occurrences = "all"
+  }
+  warning {
+    operator              = "above"
+    threshold             = 60
+    threshold_duration    = 120
+    threshold_occurrences = "all"
+  }
+}
+
+# NRQL alert condition - High Network Tx
+resource "newrelic_nrql_alert_condition" "highnettx" {
+  policy_id                      = newrelic_alert_policy.alert_policy_name.id
+  type                           = "static"
+  name                           = "High Network Trasnfer"
+  description                    = "Alert when network transfer usage is high"
+  runbook_url                    = "https://www.example.com"
+  enabled                        = true
+  violation_time_limit_seconds   = 10800
+  
+  aggregation_window             = 60
+  aggregation_method             = "event_flow"
+  aggregation_delay              = 120
+
+  nrql {
+    query             = "SELECT average(newrelic.goldenmetrics.infra.host.networkTrafficTx) FROM Metric WHERE entity.name = '${data.newrelic_entity.hostname.name}'"
+  }
+
+  critical {
+    operator              = "above"
+    threshold             = 600
+    threshold_duration    = 120
+    threshold_occurrences = "all"
+  }
+  warning {
+    operator              = "above"
+    threshold             = 300
+    threshold_duration    = 120
+    threshold_occurrences = "all"
+  }
+}
+
+# NRQL alert condition - High Network Rx
+resource "newrelic_nrql_alert_condition" "highnetrx" {
+  policy_id                      = newrelic_alert_policy.alert_policy_name.id
+  type                           = "static"
+  name                           = "High Network Receive"
+  description                    = "Alert when network receive usage is high"
+  runbook_url                    = "https://www.example.com"
+  enabled                        = true
+  violation_time_limit_seconds   = 10800
+  
+  aggregation_window             = 60
+  aggregation_method             = "event_flow"
+  aggregation_delay              = 120
+
+  nrql {
+    query             = "SELECT average(newrelic.goldenmetrics.infra.host.networkTrafficRx) FROM Metric WHERE entity.name = '${data.newrelic_entity.hostname.name}'"
+  }
+
+  critical {
+    operator              = "above"
+    threshold             = 600
+    threshold_duration    = 120
+    threshold_occurrences = "all"
+  }
+  warning {
+    operator              = "above"
+    threshold             = 300
+    threshold_duration    = 120
+    threshold_occurrences = "all"
+  }
+}
+
+# NRQL alert condition - High Process Usage
+resource "newrelic_nrql_alert_condition" "highprocess" {
+  policy_id                      = newrelic_alert_policy.alert_policy_name.id
+  type                           = "static"
+  name                           = "High Process Usage"
+  description                    = "Alert when process usage is high"
+  runbook_url                    = "https://www.example.com"
+  enabled                        = false
+  violation_time_limit_seconds   = 10800
+  
+  aggregation_window             = 60
+  aggregation_method             = "event_flow"
+  aggregation_delay              = 60
+
+  nrql {
+    query             = "SELECT average(host.process.cpuPercent) FROM Metric FACET processId, processDisplayName WHERE entity.name = '${data.newrelic_entity.hostname.name}'"
+  }
+
+  critical {
+    operator              = "above"
+    threshold             = 3
+    threshold_duration    = 60
+    threshold_occurrences = "all"
+  }
+  warning {
+    operator              = "above"
+    threshold             = 1.5
+    threshold_duration    = 60
+    threshold_occurrences = "all"
   }
 }
 

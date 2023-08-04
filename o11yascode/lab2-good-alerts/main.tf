@@ -1,6 +1,6 @@
 # Terraform configuration
 terraform {
-  required_version = "1.5.1"
+  // required_version = "1.5.1"
   required_providers {
     newrelic = {
       source  = "newrelic/newrelic"
@@ -100,6 +100,9 @@ resource "newrelic_nrql_alert_condition" "GameMainAPI" {
   aggregation_window             = 60
   aggregation_method             = "event_flow"
   aggregation_delay              = 60
+  expiration_duration = 600
+  open_violation_on_expiration = true
+  close_violations_on_expiration = true
 
   nrql {
     query             = "SELECT percentile(duration, 90) FROM Transaction WHERE appName = '${data.newrelic_entity.appname.name}' AND name = 'WebTransaction/Expressjs/GET//game'"
