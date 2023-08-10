@@ -254,13 +254,45 @@ resource "newrelic_nrql_alert_condition" "GameResponseTime" {
   }
 }
 
+# NRQL alert condition - High Process Usage
+resource "newrelic_nrql_alert_condition" "highprocess" {
+  policy_id                      = newrelic_alert_policy.alert_policy_name.id
+  type                           = "static"
+  name                           = "S3 - Host Process Usage ABOVE Acceptable Threshold"
+  description                    = "Alert when process usage is high"
+  runbook_url                    = "https://www.atlassian.com/software/confluence/templates/devops-runbook"
+  enabled                        = true
+  violation_time_limit_seconds   = 10800
+  
+  aggregation_window             = 60
+  aggregation_method             = "event_flow"
+  aggregation_delay              = 60
+
+  nrql {
+    query             = "SELECT average(host.process.cpuPercent) FROM Metric FACET processId, processDisplayName WHERE entity.name = '${data.newrelic_entity.hostname.name}'"
+  }
+
+  critical {
+    operator              = "above"
+    threshold             = 3
+    threshold_duration    = 60
+    threshold_occurrences = "all"
+  }
+  warning {
+    operator              = "above"
+    threshold             = 1.5
+    threshold_duration    = 60
+    threshold_occurrences = "all"
+  }
+}
+
 # NRQL alert condition - High CPU
 resource "newrelic_nrql_alert_condition" "highcpu" {
   policy_id                      = newrelic_alert_policy.alert_policy_name.id
   type                           = "static"
-  name                           = "High CPU"
+  name                           = "S4 - Host CPU ABOVE Acceptable Threshold"
   description                    = "Alert when CPU usage is high"
-  runbook_url                    = "https://www.example.com"
+  runbook_url                    = "https://www.atlassian.com/software/confluence/templates/devops-runbook"
   enabled                        = true
   violation_time_limit_seconds   = 10800
   
@@ -275,13 +307,13 @@ resource "newrelic_nrql_alert_condition" "highcpu" {
   critical {
     operator              = "above"
     threshold             = 90
-    threshold_duration    = 120
+    threshold_duration    = 360
     threshold_occurrences = "all"
   }
   warning {
     operator              = "above"
     threshold             = 70
-    threshold_duration    = 120
+    threshold_duration    = 360
     threshold_occurrences = "all"
   }
 }
@@ -290,9 +322,9 @@ resource "newrelic_nrql_alert_condition" "highcpu" {
 resource "newrelic_nrql_alert_condition" "highmem" {
   policy_id                      = newrelic_alert_policy.alert_policy_name.id
   type                           = "static"
-  name                           = "High Mem"
+  name                           = "S4 - Host Memory ABOVE Acceptable Threshold"
   description                    = "Alert when Mem usage is high"
-  runbook_url                    = "https://www.example.com"
+  runbook_url                    = "https://www.atlassian.com/software/confluence/templates/devops-runbook"
   enabled                        = true
   violation_time_limit_seconds   = 10800
   
@@ -322,9 +354,9 @@ resource "newrelic_nrql_alert_condition" "highmem" {
 resource "newrelic_nrql_alert_condition" "highstorage" {
   policy_id                      = newrelic_alert_policy.alert_policy_name.id
   type                           = "static"
-  name                           = "High Storage"
+  name                           = "S4 - Host Storage ABOVE Acceptable Threshold"
   description                    = "Alert when Storage usage is high"
-  runbook_url                    = "https://www.example.com"
+  runbook_url                    = "https://www.atlassian.com/software/confluence/templates/devops-runbook"
   enabled                        = true
   violation_time_limit_seconds   = 10800
   
@@ -354,9 +386,9 @@ resource "newrelic_nrql_alert_condition" "highstorage" {
 resource "newrelic_nrql_alert_condition" "highnettx" {
   policy_id                      = newrelic_alert_policy.alert_policy_name.id
   type                           = "static"
-  name                           = "High Network Trasnfer"
+  name                           = "S5 - Host Network Tx ABOVE Acceptable Threshold"
   description                    = "Alert when network transfer usage is high"
-  runbook_url                    = "https://www.example.com"
+  runbook_url                    = "https://www.atlassian.com/software/confluence/templates/devops-runbook"
   enabled                        = true
   violation_time_limit_seconds   = 10800
   
@@ -370,14 +402,14 @@ resource "newrelic_nrql_alert_condition" "highnettx" {
 
   critical {
     operator              = "above"
-    threshold             = 600
-    threshold_duration    = 120
+    threshold             = 1000
+    threshold_duration    = 360
     threshold_occurrences = "all"
   }
   warning {
     operator              = "above"
-    threshold             = 300
-    threshold_duration    = 120
+    threshold             = 800
+    threshold_duration    = 360
     threshold_occurrences = "all"
   }
 }
@@ -386,9 +418,9 @@ resource "newrelic_nrql_alert_condition" "highnettx" {
 resource "newrelic_nrql_alert_condition" "highnetrx" {
   policy_id                      = newrelic_alert_policy.alert_policy_name.id
   type                           = "static"
-  name                           = "High Network Receive"
+  name                           = "S5 - Host Network Rx ABOVE Acceptable Threshold"
   description                    = "Alert when network receive usage is high"
-  runbook_url                    = "https://www.example.com"
+  runbook_url                    = "https://www.atlassian.com/software/confluence/templates/devops-runbook"
   enabled                        = true
   violation_time_limit_seconds   = 10800
   
@@ -402,46 +434,14 @@ resource "newrelic_nrql_alert_condition" "highnetrx" {
 
   critical {
     operator              = "above"
-    threshold             = 600
-    threshold_duration    = 120
+    threshold             = 1000
+    threshold_duration    = 360
     threshold_occurrences = "all"
   }
   warning {
     operator              = "above"
-    threshold             = 300
-    threshold_duration    = 120
-    threshold_occurrences = "all"
-  }
-}
-
-# NRQL alert condition - High Process Usage
-resource "newrelic_nrql_alert_condition" "highprocess" {
-  policy_id                      = newrelic_alert_policy.alert_policy_name.id
-  type                           = "static"
-  name                           = "High Process Usage"
-  description                    = "Alert when process usage is high"
-  runbook_url                    = "https://www.example.com"
-  enabled                        = false
-  violation_time_limit_seconds   = 10800
-  
-  aggregation_window             = 60
-  aggregation_method             = "event_flow"
-  aggregation_delay              = 60
-
-  nrql {
-    query             = "SELECT average(host.process.cpuPercent) FROM Metric FACET processId, processDisplayName WHERE entity.name = '${data.newrelic_entity.hostname.name}'"
-  }
-
-  critical {
-    operator              = "above"
-    threshold             = 3
-    threshold_duration    = 60
-    threshold_occurrences = "all"
-  }
-  warning {
-    operator              = "above"
-    threshold             = 1.5
-    threshold_duration    = 60
+    threshold             = 800
+    threshold_duration    = 360
     threshold_occurrences = "all"
   }
 }
@@ -517,7 +517,6 @@ resource "newrelic_workflow" "c3_workflow" {
 }
 
 ### Alert muting ###
-
 resource "newrelic_alert_muting_rule" "silent_noise" {
     name = "Muting All Alert Storm"
     enabled = true
