@@ -131,7 +131,7 @@ resource "newrelic_nrql_alert_condition" "highstorage" {
 resource "newrelic_nrql_alert_condition" "highnettx" {
   policy_id                      = newrelic_alert_policy.alert_policy_name.id
   type                           = "static"
-  name                           = "High Network Trasnfer"
+  name                           = "High Network Transfer"
   description                    = "Alert when network transfer usage is high"
   runbook_url                    = "https://www.example.com"
   enabled                        = true
@@ -211,13 +211,13 @@ resource "newrelic_nrql_alert_condition" "highprocess" {
 
   critical {
     operator              = "above"
-    threshold             = 1
+    threshold             = 0.5
     threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
   warning {
     operator              = "above"
-    threshold             = 0.5
+    threshold             = 0.2
     threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
