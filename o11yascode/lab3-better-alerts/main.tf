@@ -500,17 +500,17 @@ resource "newrelic_workflow" "c3_workflow" {
       
       content {
           nrql {
-          name = "Linux Process Enrichment - Infrastructure"
-          configuration {
-              query = "SELECT average(host.process.cpuPercent) as 'Processes' FROM Metric FACET processId, processDisplayName WHERE entity.name ='workshopaqm-infra' SINCE 1 hour ago"
-          }
+            name = "Linux Process Enrichment - Infrastructure"
+            configuration {
+                query = "SELECT average(host.process.cpuPercent) as 'Processes' FROM Metric FACET processId, processDisplayName WHERE entity.name ='workshopaqm-infra' SINCE 1 hour ago"
+            }
           }
 
           nrql {
-          name = "Stress-ng Logs Enrichment - Logs"
-          configuration {
-              query = "SELECT count(*) FROM Log WHERE allColumnSearch('CRON', insensitive: true) AND allColumnSearch('CMD', insensitive: true) since 1 hour ago FACET message"
-          }
+            name = "Stress-ng Logs Enrichment - Logs"
+            configuration {
+                query = "SELECT count(*) FROM Log WHERE allColumnSearch('CRON', insensitive: true) AND allColumnSearch('CMD', insensitive: true) since 1 hour ago FACET message"
+            }
           }
       }
     }
