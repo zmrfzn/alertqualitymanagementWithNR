@@ -495,21 +495,25 @@ resource "newrelic_workflow" "c3_workflow" {
     # }
   }
 
-  enrichments {
-    nrql {
-      name = "Linux Process Enrichment - Infrastructure"
-      configuration {
-        query = "SELECT average(host.process.cpuPercent) as 'Processes' FROM Metric FACET processId, processDisplayName WHERE entity.name ='workshopaqm-infra' SINCE 1 hour ago"
-      }
-    }
+  dynamic "enrichments" {
+      for_each = var.account_type == "free" ? []: [1]
+      
+      content {
+          nrql {
+          name = "Linux Process Enrichment - Infrastructure"
+          configuration {
+              query = "SELECT average(host.process.cpuPercent) as 'Processes' FROM Metric FACET processId, processDisplayName WHERE entity.name ='workshopaqm-infra' SINCE 1 hour ago"
+          }
+          }
 
-    nrql {
-      name = "Stress-ng Logs Enrichment - Logs"
-      configuration {
-        query = "SELECT count(*) FROM Log WHERE allColumnSearch('CRON', insensitive: true) AND allColumnSearch('CMD', insensitive: true) since 1 hour ago FACET message"
+          nrql {
+          name = "Stress-ng Logs Enrichment - Logs"
+          configuration {
+              query = "SELECT count(*) FROM Log WHERE allColumnSearch('CRON', insensitive: true) AND allColumnSearch('CMD', insensitive: true) since 1 hour ago FACET message"
+          }
+          }
       }
     }
-  }
 
   destination {
     channel_id = newrelic_notification_channel.c3_notification_channel.id
