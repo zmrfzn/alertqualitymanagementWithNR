@@ -28,8 +28,8 @@ variable "email" {
   default = "username@example.com"
 }
 
-# env var "TF_VAR_account_type=free" required to prevent entitlement issues with enrichments
+# env var "TF_VAR_account_type=paid" required to prevent entitlement issues with enrichments
 variable "account_type" {
     type = string
-    default = "free"
+    default = "paid"
 }

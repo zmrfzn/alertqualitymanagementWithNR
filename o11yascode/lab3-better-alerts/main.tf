@@ -496,7 +496,7 @@ resource "newrelic_workflow" "c3_workflow" {
   }
 
   dynamic "enrichments" {
-      for_each = var.account_type == "free" ? []: [1]
+      for_each = var.account_type == "paid" ? [1]: []
       
       content {
           nrql {
