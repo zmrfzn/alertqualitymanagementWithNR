@@ -23,11 +23,12 @@
     "browser-sync": "^2.18.2"
   },
   "dependencies": {
+    "axios": "^1.9.0",
     "body": "^5.1.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-chaos-middleware": "^1.2.4",
-    "newrelic": "^11.0.0",
+    "newrelic": "^11.23.2",
     "parser": "^0.1.4",
     "winston": "^3.9.0"
   }
