@@ -6,6 +6,9 @@ class PlayState extends Phaser.State {
         window.play = this;
         this.between = this.game.rnd.between.bind(this.game.rnd);
 
+        // Initialize AI analysis session
+        this.initAIAnalysis();
+
         this.createBackground();
         this.createSounds();
         this.playMusic();
@@ -845,6 +848,19 @@ class PlayState extends Phaser.State {
     }
 
     fireMissile({ position }) {
+        if (!config.MISSILES_ENABLED) return;
+
+        const missile = this.createMissile();
+        const targetDistance = Phaser.Math.distance(
+            position.x,
+            position.y,
+            this.game.world.centerX,
+            this.game.world.centerY
+        );
+
+        // Calculate missile speed based on distance
+        const missileSpeed = Math.min(targetDistance * 0.5, config.MAX_MISSILE_SPEED);
+
         if (this.isAlive()) {
             const { x, y } = position;
 
@@ -881,6 +897,13 @@ class PlayState extends Phaser.State {
                 );
             trajectory.onComplete.add(() => this.explodeMissile(missile), this);
         }
+
+        // Send missile action to AI analyzer
+        this.sendMissileAction({
+            success: false, // Will be updated when missile hits or misses
+            targetDistance,
+            missileSpeed
+        });
     }
 
     explodeMissile(missile) {
@@ -937,6 +960,13 @@ class PlayState extends Phaser.State {
 
         this.sounds.MissileExplosion.play();
         missile.destroy();
+
+        // Update AI with missile result
+        this.sendMissileAction({
+            success: true,
+            targetDistance: missile.targetDistance,
+            missileSpeed: missile.missileSpeed
+        });
     }
 
     boomHit(boom, celestial) {
@@ -1116,7 +1146,8 @@ class PlayState extends Phaser.State {
     }
 
     next() {
-        this.game.stateTransition.to('ScoreState', false, false, { stats: this.stats, music: this.sounds.DefeatMusic });
+        this.endGameAnalysis();
+        this.game.state.start('ScoreState');
     }
 
     getRandomOffscreenPoint() {
@@ -1169,5 +1200,127 @@ class PlayState extends Phaser.State {
         }
 
         return circlePoints;
+    }
+
+    // Add new AI analysis methods
+    async initAIAnalysis() {
+        try {
+            const response = await fetch('/api/ai/game/start', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    playerId: this.generatePlayerId()
+                })
+            });
+            
+            const data = await response.json();
+            this.aiSessionId = data.sessionId;
+            console.log('AI analysis session started:', this.aiSessionId);
+        } catch (error) {
+            console.error('Failed to start AI analysis session:', error);
+        }
+    }
+
+    generatePlayerId() {
+        return 'player_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    async sendMissileAction(actionData) {
+        if (!this.aiSessionId) return;
+
+        try {
+            const response = await fetch('/api/ai/game/action', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    sessionId: this.aiSessionId,
+                    action: {
+                        type: 'missile_shot',
+                        success: actionData.success,
+                        timestamp: Date.now(),
+                        targetDistance: actionData.targetDistance,
+                        missileSpeed: actionData.missileSpeed
+                    }
+                })
+            });
+
+            const analysis = await response.json();
+            this.handleAIAnalysis(analysis);
+        } catch (error) {
+            console.error('Failed to send missile action:', error);
+        }
+    }
+
+    handleAIAnalysis(analysis) {
+        if (analysis.analysis) {
+            // Update UI with real-time feedback
+            this.updateAIFeedback(analysis.analysis);
+        }
+    }
+
+    updateAIFeedback(analysis) {
+        // Update UI elements with AI feedback
+        if (this.aiFeedbackText) {
+            this.aiFeedbackText.destroy();
+        }
+
+        this.aiFeedbackText = this.game.add.text(
+            this.game.world.centerX,
+            50,
+            `Accuracy: ${analysis.accuracy}\nHit Rate: ${analysis.hitRate}%`,
+            {
+                font: '16px Arial',
+                fill: '#ffffff',
+                align: 'center'
+            }
+        );
+        this.aiFeedbackText.anchor.set(0.5);
+    }
+
+    // Add end game analysis
+    async endGameAnalysis() {
+        if (!this.aiSessionId) return;
+
+        try {
+            const response = await fetch('/api/ai/game/end', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    sessionId: this.aiSessionId
+                })
+            });
+
+            const analysis = await response.json();
+            this.showFinalAnalysis(analysis);
+        } catch (error) {
+            console.error('Failed to get end game analysis:', error);
+        }
+    }
+
+    showFinalAnalysis(analysis) {
+        const sessionAnalysis = analysis.sessionAnalysis;
+        
+        // Create final analysis UI
+        const analysisText = this.game.add.text(
+            this.game.world.centerX,
+            this.game.world.centerY,
+            `Game Analysis:\n\n` +
+            `Skill Level: ${sessionAnalysis.skillLevel}\n` +
+            `Shooting Style: ${sessionAnalysis.shootingStyle}\n\n` +
+            `Strengths:\n${sessionAnalysis.strengths.join('\n')}\n\n` +
+            `Improvements:\n${sessionAnalysis.improvements.join('\n')}`,
+            {
+                font: '20px Arial',
+                fill: '#ffffff',
+                align: 'center'
+            }
+        );
+        analysisText.anchor.set(0.5);
     }
 }

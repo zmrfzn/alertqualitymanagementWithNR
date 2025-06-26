@@ -9,7 +9,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name: ['workshopaqm-app'],
+  app_name: ['workshopaqm-app-ai'],
   /**
    * Your New Relic license key.
    */
@@ -26,6 +26,16 @@ exports.config = {
     forwarding: {
       enabled: true
     }
+  },
+  // enable ai monitoring 
+  ai_monitoring: {
+    enabled: true
+  },
+  span_events: {
+    max_samples_stored: 10000
+  },
+  custom_insights_events: {
+    max_samples_stored: 100000
   },
   /**
    * When true, all request headers except for those listed in attributes.exclude
