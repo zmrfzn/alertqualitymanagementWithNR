@@ -23,6 +23,21 @@ data "newrelic_entity" "hostname" {
   domain = "INFRA"
 }
 
+# LEARNER ACTION (Challenge 2): tag the host entity for ownership + filtering.
+# Uncomment this whole resource and fill in the tags, then re-apply.
+# resource "newrelic_entity_tags" "hostname" {
+#   guid = data.newrelic_entity.hostname.guid
+#
+#   tag {
+#     key    = "team"
+#     values = ["Platform"]
+#   }
+#   tag {
+#     key    = "environment"
+#     values = ["Production"]
+#   }
+# }
+
 ### Alert policy & condition ###
 
 # Alert policy
