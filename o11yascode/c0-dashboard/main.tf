@@ -11,7 +11,7 @@ provider "newrelic" {
 }
 
 resource "newrelic_one_dashboard" "aqm_scorecard" {
-  name = "AQM Scorecard — Alert Noise"
+  name = "AQM Scorecard - Alert Noise"
 
   page {
     name = "Alert Noise"
