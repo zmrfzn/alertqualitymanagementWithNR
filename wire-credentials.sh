@@ -17,11 +17,19 @@ for v in NR_LICENSE_KEY NR_USER_API_KEY NR_ACCOUNT_ID; do
   if [ -z "${!v:-}" ]; then echo "ERROR: $v is empty in workshop.env" >&2; exit 1; fi
 done
 
-echo "==> Wiring New Relic Infrastructure agent"
+echo "==> Wiring New Relic Infrastructure agent (metrics + process events)"
 sudo tee /etc/newrelic-infra.yml >/dev/null <<EOF
 license_key: ${NR_LICENSE_KEY}
 display_name: workshopaqm-infra
-enable_process_metrics: false
+enable_process_metrics: true
+EOF
+
+echo "==> Enabling host logs (syslog) so all signals flow from the start"
+sudo mkdir -p /etc/newrelic-infra/logging.d
+sudo tee /etc/newrelic-infra/logging.d/logging.yml >/dev/null <<EOF
+logs:
+  - name: syslog
+    file: /var/log/syslog
 EOF
 
 echo "==> Wiring Node APM (newrelic.js)"
