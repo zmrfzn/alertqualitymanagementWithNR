@@ -13,3 +13,12 @@ dist
 build_files/*.spec
 
 *.log
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+**/.terraform.lock.hcl
+# Workshop runtime
+workshop.env
+app.log
