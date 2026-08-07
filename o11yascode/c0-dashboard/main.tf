@@ -24,7 +24,7 @@ resource "newrelic_one_dashboard" "aqm_scorecard" {
       height = 3
       nrql_query {
         account_id = var.account_id
-        query      = "SELECT uniqueCount(issueId) FROM NrAiIssue WHERE event = 'open' SINCE 30 minutes ago"
+        query      = "SELECT uniqueCount(issueId) FROM NrAiIssue where event in('activate','create')"
       }
     }
 
@@ -36,7 +36,7 @@ resource "newrelic_one_dashboard" "aqm_scorecard" {
       height = 3
       nrql_query {
         account_id = var.account_id
-        query      = "SELECT count(*) FROM NrAiIssue WHERE event = 'open' FACET policyName TIMESERIES SINCE 1 hour ago"
+        query      = "SELECT count(*) FROM NrAiIncident WHERE event in ('activate','create','open') FACET policyName TIMESERIES"
       }
     }
 
@@ -48,7 +48,7 @@ resource "newrelic_one_dashboard" "aqm_scorecard" {
       height = 3
       nrql_query {
         account_id = var.account_id
-        query      = "SELECT count(*) FROM NrAiIssue WHERE event = 'open' FACET policyName SINCE 2 hours ago"
+        query      = "SELECT count(*) FROM NrAiIncident FACET policyName"
       }
     }
   }
