@@ -522,20 +522,15 @@ resource "newrelic_workflow" "c3_workflow" {
 
 ### Alert muting ###
 resource "newrelic_alert_muting_rule" "silent_noise" {
-  name        = "Challenge 4 - Mute Infra Storm"
-  enabled     = false # LEARNER ACTION (Challenge 4): set to true to silence the C1/C2 storm
-  description = "Silence the noisy Challenge 1 (manual) and Challenge 2 infra policies."
+  name        = "Quality - Mute Infra Noise"
+  enabled     = false # LEARNER ACTION (Improve Alert Quality Part 2): set to true to silence the infra host noise
+  description = "Silence the noisy Challenge 2 infra host conditions so only actionable app alerts notify. (The manual Challenge 1 storm was already muted in Improve Alert Response.)"
   condition {
-    conditions {
-      attribute = "policyName"
-      operator  = "CONTAINS"
-      values    = ["Challenge 1"]
-    }
     conditions {
       attribute = "policyName"
       operator  = "CONTAINS"
       values    = ["Challenge 2"]
     }
-    operator = "OR"
+    operator = "AND"
   }
 }
