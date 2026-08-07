@@ -111,13 +111,13 @@ resource "newrelic_nrql_alert_condition" "GameMainAPI" {
   critical {
     operator              = "above"
     threshold             = 4
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
   warning {
     operator              = "above"
     threshold             = 3
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
 }
@@ -144,13 +144,13 @@ resource "newrelic_nrql_alert_condition" "GameServingAssets" {
   critical {
     operator              = "above"
     threshold             = 5
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
   warning {
     operator              = "above"
     threshold             = 3
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
   # LEARNER ACTION: uncomment to handle loss of signal
@@ -180,13 +180,13 @@ resource "newrelic_nrql_alert_condition" "GameProcesses" {
   critical {
     operator              = "above"
     threshold             = 10
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
   warning {
     operator              = "above"
     threshold             = 8
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
 }
@@ -214,13 +214,13 @@ resource "newrelic_nrql_alert_condition" "GameThroughput" {
   critical {
     operator              = "above"
     threshold             = 10
-    threshold_duration    = 180
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
   warning {
     operator              = "above"
     threshold             = 8
-    threshold_duration    = 180
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
 }
@@ -248,13 +248,13 @@ resource "newrelic_nrql_alert_condition" "GameResponseTime" {
   critical {
     operator              = "above"
     threshold             = 5
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
   warning {
     operator              = "above"
     threshold             = 4
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
 }

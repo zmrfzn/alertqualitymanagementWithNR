@@ -29,7 +29,7 @@ resource "newrelic_one_dashboard" "aqm_scorecard" {
     }
 
     widget_line {
-      title  = "Issues opened over time, by policy"
+      title  = "Issues opened over time, by policy (includes muted)"
       row    = 1
       column = 5
       width  = 8
@@ -41,7 +41,7 @@ resource "newrelic_one_dashboard" "aqm_scorecard" {
     }
 
     widget_bar {
-      title  = "Noisiest policies"
+      title  = "Issues opened by policy (includes muted)"
       row    = 4
       column = 1
       width  = 12
@@ -49,6 +49,21 @@ resource "newrelic_one_dashboard" "aqm_scorecard" {
       nrql_query {
         account_id = var.account_id
         query      = "SELECT count(*) FROM NrAiIncident FACET policyName"
+      }
+    }
+
+    # Un-muted (notifying) issues only. After muting is armed, the tuned
+    # policies should read low here even while the widget above still counts
+    # their muted issues.
+    widget_bar {
+      title  = "Notifying issues by policy (un-muted)"
+      row    = 7
+      column = 1
+      width  = 12
+      height = 3
+      nrql_query {
+        account_id = var.account_id
+        query      = "SELECT uniqueCount(issueId) FROM NrAiIssue WHERE muted IS FALSE FACET policyName"
       }
     }
   }

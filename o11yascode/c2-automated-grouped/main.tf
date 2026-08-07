@@ -74,13 +74,13 @@ resource "newrelic_nrql_alert_condition" "highcpu" {
   critical {
     operator              = "above"
     threshold             = 50
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
   warning {
     operator              = "above"
     threshold             = 30
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
 }
@@ -106,13 +106,13 @@ resource "newrelic_nrql_alert_condition" "highmem" {
   critical {
     operator              = "above"
     threshold             = 40
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
   warning {
     operator              = "above"
     threshold             = 20
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
 }
@@ -138,13 +138,13 @@ resource "newrelic_nrql_alert_condition" "highstorage" {
   critical {
     operator              = "above"
     threshold             = 20
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
   warning {
     operator              = "above"
     threshold             = 10
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
 }
@@ -170,13 +170,13 @@ resource "newrelic_nrql_alert_condition" "highnettx" {
   critical {
     operator              = "above"
     threshold             = 300
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
   warning {
     operator              = "above"
     threshold             = 150
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
 }
@@ -202,13 +202,13 @@ resource "newrelic_nrql_alert_condition" "highnetrx" {
   critical {
     operator              = "above"
     threshold             = 300
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
   warning {
     operator              = "above"
     threshold             = 120
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
 }
@@ -311,7 +311,7 @@ resource "newrelic_nrql_alert_condition" "app_error_rate" {
   critical {
     operator              = "above"
     threshold             = 5
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
 }

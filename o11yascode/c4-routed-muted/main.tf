@@ -111,13 +111,13 @@ resource "newrelic_nrql_alert_condition" "GameMainAPI" {
   critical {
     operator              = "above"
     threshold             = 4
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
   warning {
     operator              = "above"
     threshold             = 3
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
 }
@@ -143,13 +143,13 @@ resource "newrelic_nrql_alert_condition" "GameServingAssets" {
   critical {
     operator              = "above"
     threshold             = 20
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
   warning {
     operator              = "above"
     threshold             = 10
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
 }
@@ -175,13 +175,13 @@ resource "newrelic_nrql_alert_condition" "GameProcesses" {
   critical {
     operator              = "above"
     threshold             = 10
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
   warning {
     operator              = "above"
     threshold             = 8
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
 }
@@ -209,13 +209,13 @@ resource "newrelic_nrql_alert_condition" "GameThroughput" {
   critical {
     operator              = "above"
     threshold             = 10
-    threshold_duration    = 180
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
   warning {
     operator              = "above"
     threshold             = 8
-    threshold_duration    = 180
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
 }
@@ -243,13 +243,13 @@ resource "newrelic_nrql_alert_condition" "GameResponseTime" {
   critical {
     operator              = "above"
     threshold             = 5
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
   warning {
     operator              = "above"
     threshold             = 4
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "at_least_once"
   }
 }
@@ -307,13 +307,13 @@ resource "newrelic_nrql_alert_condition" "highcpu" {
   critical {
     operator              = "above"
     threshold             = 90
-    threshold_duration    = 360
+    threshold_duration    = 60
     threshold_occurrences = "all"
   }
   warning {
     operator              = "above"
     threshold             = 70
-    threshold_duration    = 360
+    threshold_duration    = 60
     threshold_occurrences = "all"
   }
 }
@@ -339,13 +339,13 @@ resource "newrelic_nrql_alert_condition" "highmem" {
   critical {
     operator              = "above"
     threshold             = 90
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "all"
   }
   warning {
     operator              = "above"
     threshold             = 70
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "all"
   }
 }
@@ -371,13 +371,13 @@ resource "newrelic_nrql_alert_condition" "highstorage" {
   critical {
     operator              = "above"
     threshold             = 80
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "all"
   }
   warning {
     operator              = "above"
     threshold             = 60
-    threshold_duration    = 120
+    threshold_duration    = 60
     threshold_occurrences = "all"
   }
 }
@@ -403,13 +403,13 @@ resource "newrelic_nrql_alert_condition" "highnettx" {
   critical {
     operator              = "above"
     threshold             = 1000
-    threshold_duration    = 360
+    threshold_duration    = 60
     threshold_occurrences = "all"
   }
   warning {
     operator              = "above"
     threshold             = 800
-    threshold_duration    = 360
+    threshold_duration    = 60
     threshold_occurrences = "all"
   }
 }
@@ -435,13 +435,13 @@ resource "newrelic_nrql_alert_condition" "highnetrx" {
   critical {
     operator              = "above"
     threshold             = 1000
-    threshold_duration    = 360
+    threshold_duration    = 60
     threshold_occurrences = "all"
   }
   warning {
     operator              = "above"
     threshold             = 800
-    threshold_duration    = 360
+    threshold_duration    = 60
     threshold_occurrences = "all"
   }
 }
@@ -454,8 +454,9 @@ resource "newrelic_notification_destination" "c3_notification_destination" {
   type = "EMAIL"
 
   property {
-    key   = "email"
-    value = var.email
+    key = "email"
+    # LEARNER ACTION (Improve Alert Quality Part 2): change this to your own email to receive the notifications.
+    value = "you@example.com"
   }
 }
 
@@ -522,9 +523,9 @@ resource "newrelic_workflow" "c3_workflow" {
 
 ### Alert muting ###
 resource "newrelic_alert_muting_rule" "silent_noise" {
-  name        = "Quality - Mute Infra Noise"
-  enabled     = false # LEARNER ACTION (Improve Alert Quality Part 2): set to true to silence the infra host noise
-  description = "Silence the noisy Challenge 2 infra host conditions so only actionable app alerts notify. (The manual Challenge 1 storm was already muted in Improve Alert Response.)"
+  name        = "Quality - Mute the Noisy Storm"
+  enabled     = false # LEARNER ACTION (Improve Alert Quality Part 2): set to true to silence the noisy Challenge 2 storm
+  description = "Silence the noisy Challenge 2 storm policy so only the tuned, actionable conditions keep notifying. (The manual Challenge 1 storm was already muted in Improve Alert Response.)"
   condition {
     conditions {
       attribute = "policyName"
