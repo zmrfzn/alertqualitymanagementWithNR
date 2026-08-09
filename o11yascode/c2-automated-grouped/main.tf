@@ -50,7 +50,7 @@ data "newrelic_entity" "appname" {
 # Alert policy
 resource "newrelic_alert_policy" "alert_policy_name" {
   name                = "Challenge 2 - Automated & Grouped"
-  incident_preference = "PER_CONDITION_AND_TARGET" # LEARNER ACTION: change to PER_POLICY in Challenge 2
+  incident_preference = "PER_CONDITION_AND_TARGET" # LEARNER ACTION: climb the ladder PER_CONDITION_AND_TARGET -> PER_CONDITION -> PER_POLICY (see the assignment)
 }
 
 # NRQL alert condition - High CPU
