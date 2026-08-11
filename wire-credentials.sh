@@ -45,8 +45,14 @@ EOF
 
 if command -v newrelic >/dev/null 2>&1; then
   echo "==> Configuring newrelic CLI profile (workshop)"
-  newrelic profile add --profile workshop --apiKey "${NR_USER_API_KEY}" \
-    --accountId "${NR_ACCOUNT_ID}" --region "${NR_REGION}" >/dev/null 2>&1 || true
+  # -y and </dev/null keep this non-interactive: without them the CLI prompts for
+  # any missing value and blocks forever, since setup scripts have no stdin.
+  newrelic profile add --profile workshop \
+    --apiKey "${NR_USER_API_KEY}" \
+    --accountId "${NR_ACCOUNT_ID}" \
+    --region "${NR_REGION}" \
+    --licenseKey "${NR_LICENSE_KEY}" \
+    -y </dev/null || true
 fi
 
 echo "==> Restarting Infrastructure agent"
